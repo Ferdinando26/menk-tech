@@ -21,8 +21,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Product getProductById(Long id){
-        Optional<Product> product = iProductRepository.findById(id);
-        return product.orElse(null);
+        return iProductRepository.getReferenceById(id);
     }
 
     public Product addProduct(Product product){
@@ -39,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
             existingProduct.setDescription(product.getDescription());
             existingProduct.setPurchaseLink(product.getPurchaseLink());
             existingProduct.setCategory(product.getCategory());
-            existingProduct.setModel(product.getModel());
+            existingProduct.setBrand(product.getBrand());
             existingProduct.setPrice(product.getPrice());
 
             return iProductRepository.save(existingProduct);

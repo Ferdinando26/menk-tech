@@ -5,15 +5,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 
 @Entity
 @Data
 @Getter
 @Setter
-public class Product {
+@EqualsAndHashCode
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +31,7 @@ public class Product {
 
     private String category;
 
-    private String model;
+    private String brand;
 
     private String price;
 
