@@ -1,17 +1,27 @@
 package com.menktech.service;
 
 import com.menktech.entity.User;
+import com.menktech.repository.IRoleRepository;
 import com.menktech.repository.IUserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService{
 
     @Autowired
     private IUserRepository iUserRepository;
+
+    @Autowired
+    private IRoleRepository iRoleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAllUsers() {
@@ -25,22 +35,26 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User addUser(User user) {
-        return iUserRepository.save(user);
+
+        user.setRoles(user.getRoles()
+                .stream()
+                .map(role -> iRoleRepository.findByName(role.getName()))
+                .toList());
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return this.iUserRepository.save(user);
     }
 
     @Override
     public User updateUser(User user) {
 
-        User existingUser = iUserRepository.findById(user.getId()).orElse(null);
-        if(existingUser !=null){
+        user.setRoles(user.getRoles()
+                .stream()
+                .map(role -> iRoleRepository.findByName(role.getName()))
+                .toList());
 
-            existingUser.setPassword(user.getPassword());
-            existingUser.setRoles(user.getRoles());
-            existingUser.setUsername(user.getUsername());
-
-            return iUserRepository.save(existingUser);
-        }
-        return null;
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return this.iUserRepository.save(user);
     }
 
     @Override

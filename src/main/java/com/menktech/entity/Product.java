@@ -1,5 +1,6 @@
 package com.menktech.entity;
 
+import com.menktech.status.ProductStatusEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,5 +35,7 @@ public class Product implements Serializable {
     private String brand;
 
     private String price;
+
+    private ProductStatusEnum status;
 
 }

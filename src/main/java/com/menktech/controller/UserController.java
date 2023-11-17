@@ -18,13 +18,15 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user){
-        return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
+    public ResponseEntity<String> addUser(@RequestBody User user){
+        User createdUser = userService.addUser(user);
+        return new ResponseEntity<>("New user created " + createdUser.getUsername(), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody User user){
-        return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
+    public ResponseEntity<String> updateUser(@RequestBody User user){
+        User modifiedUser = userService.addUser(user);
+        return new ResponseEntity<>("User modified " + modifiedUser.getUsername(), HttpStatus.OK);
     }
 
     @GetMapping

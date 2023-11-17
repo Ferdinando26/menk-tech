@@ -26,9 +26,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
-        return product != null ?
-                ResponseEntity.ok(product) :
-                ResponseEntity.notFound().build();
+        return product != null ? ResponseEntity.ok(product) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
@@ -40,9 +38,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct (@PathVariable Long id, @RequestBody Product product ){
         Product updatedProduct = productService.updateProduct(id, product);
-        return updatedProduct != null ?
-                ResponseEntity.ok(updatedProduct) :
-                ResponseEntity.notFound().build();
+        return updatedProduct != null ? ResponseEntity.ok(updatedProduct) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")

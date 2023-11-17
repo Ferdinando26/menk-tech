@@ -1,9 +1,8 @@
 package com.menktech.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.menktech.permissions.PermissionEnum;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,16 +15,19 @@ import java.util.List;
 @Data
 @Getter
 @Setter
-@EqualsAndHashCode
 public class Role {
 
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private String name;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private PermissionEnum name;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonBackReference
     private List<User> users;
 
 

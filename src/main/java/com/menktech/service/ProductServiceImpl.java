@@ -40,6 +40,7 @@ public class ProductServiceImpl implements ProductService {
             existingProduct.setCategory(product.getCategory());
             existingProduct.setBrand(product.getBrand());
             existingProduct.setPrice(product.getPrice());
+            existingProduct.setStatus(product.getStatus());
 
             return iProductRepository.save(existingProduct);
         }
