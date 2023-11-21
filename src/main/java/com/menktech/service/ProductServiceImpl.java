@@ -2,6 +2,8 @@ package com.menktech.service;
 
 import com.menktech.entity.Product;
 import com.menktech.repository.IProductRepository;
+import com.menktech.request.CreateProductRequest;
+import com.menktech.request.UpdateProductRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,30 +23,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Product getProductById(Long id){
-        return iProductRepository.getReferenceById(id);
+        Optional<Product> optionalProduct = iProductRepository.findProductById(id);
+        return optionalProduct.orElse(null);
     }
 
-    public Product addProduct(Product product){
-        return iProductRepository.save(product);
+    public Product addProduct(CreateProductRequest request){
+
+        Product product = Product.fromCreateRequest(request);
+        return this.iProductRepository.save(product);
     }
 
 
-    @Override
-    public Product updateProduct(Long id, Product product) {
-        Product existingProduct = iProductRepository.findById(id).orElse(null);
-        if (existingProduct != null){
+    public Product updateProduct(Long id, UpdateProductRequest request) {
 
-            existingProduct.setName(product.getName());
-            existingProduct.setDescription(product.getDescription());
-            existingProduct.setPurchaseLink(product.getPurchaseLink());
-            existingProduct.setCategory(product.getCategory());
-            existingProduct.setBrand(product.getBrand());
-            existingProduct.setPrice(product.getPrice());
-            existingProduct.setStatus(product.getStatus());
+        Product existingProduct = iProductRepository.getReferenceById(id);
 
-            return iProductRepository.save(existingProduct);
-        }
-        return null;
+        existingProduct.updateProductDetails(request);
+
+        return this.iProductRepository.save(existingProduct);
     }
 
     public void deleteProduct(Long id){

@@ -1,6 +1,10 @@
 package com.menktech.controller;
 
 import com.menktech.entity.Product;
+import com.menktech.request.CreateProductRequest;
+import com.menktech.request.UpdateProductRequest;
+import com.menktech.response.CreateProductResponse;
+import com.menktech.response.UpdateProductResponse;
 import com.menktech.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,21 +34,32 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> addProduct(@RequestBody Product product){
-        Product newProduct = productService.addProduct(product);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
+    public ResponseEntity<CreateProductResponse> addProduct(@RequestBody CreateProductRequest request){
+
+        Product newProduct = productService.addProduct(request);
+
+        CreateProductResponse response = CreateProductResponse.createFromProduct(newProduct);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct (@PathVariable Long id, @RequestBody Product product ){
-        Product updatedProduct = productService.updateProduct(id, product);
-        return updatedProduct != null ? ResponseEntity.ok(updatedProduct) : ResponseEntity.notFound().build();
+    public ResponseEntity<UpdateProductResponse> updateProduct (@PathVariable Long id, @RequestBody UpdateProductRequest request ){
+
+        Product updatedProduct = productService.updateProduct(id, request);
+
+        UpdateProductResponse response = UpdateProductResponse.fromProduct(updatedProduct);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct (@PathVariable Long id){
-        productService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
+
+        Product productToDelete = productService.getProductById(id);
+
+        return productToDelete != null ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
 }
